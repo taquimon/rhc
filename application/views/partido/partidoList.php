@@ -15,6 +15,7 @@
                 type: "POST",
                 data: function(d) {
                     d.disciplina = $("#disciplina").val()
+                    d.gestion = $("#gestion").val()
                 }
 
             },
@@ -111,7 +112,7 @@
         $.ajax({
             url: "<?=site_url('partido/ajaxGetPartidoById')?>",
             data: {
-                partidoId: idPartido
+                partidoId: idPartido                
             },
             dataType: "json",
             type: 'POST',
@@ -176,6 +177,7 @@
         var club_table = $("#partido_table").dataTable();
         var dataPartidoFilter = {
             disciplina: $("#disciplina").val(),
+            gestion: $("#gestion").val()
         };
         var url = "<?=site_url('partido/ajaxListPartido')?>";
 
@@ -349,7 +351,16 @@
 <div class="grid">
     <div class="row cells12">
         <div class="cell"></div>
-        <div class="cell colspan8">
+        <div class="cell colspan3">
+            Año: 
+            <div class="input-control select">
+                <select name="gestion" id="gestion">                    
+                    <option value="2015">2015</option>
+                    <option value="2016" selected="true">2016</option>                    
+                </select>
+            </div>
+        </div>
+        <div class="cell colspan5">
             Disciplina:
             <div class="input-control select">
                 <select name="disciplina" id="disciplina">

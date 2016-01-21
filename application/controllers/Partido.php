@@ -29,16 +29,17 @@ class Partido extends MY_Controller {
         $this->layout();
     }
 
-    public function ajaxListPartido($disciplina = null){
+    public function ajaxListPartido($gestion = null,$disciplina = null){
 
         if(isset($this->request['disciplina'])){
             $disciplina = $this->request['disciplina'];
+            $gestion = $this->request['gestion'];
             if($disciplina == "Todos"){
                 $disciplina = null;
             }
                 
         }
-        $partidos = $this->partidoModel->getPartidoList($disciplina);
+        $partidos = $this->partidoModel->getPartidoList($gestion, $disciplina);
 
         foreach($partidos as $partido){
             $link = $partido->idpartido;
