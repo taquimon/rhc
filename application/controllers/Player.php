@@ -50,8 +50,14 @@ class Player extends MY_Controller {
 
             $player->idclub = $clubData->name;
             $player->disciplina = $disciplinaData->name;
-            $player->buttons =  '<a href="javascript:loadPlayerData('.$link.')" class="button cycle-button bg-cobalt fg-white"><span class="mif-pencil"></span></a>' ;
-            $player->notas =  '<a href="javascript:loadNotasData('.$link.')" class="button cycle-button bg-cobalt fg-white"><span class="mif-search"></span></a>' ;
+            $player->buttons =  '<a href="javascript:loadPlayerData('.$link.');" class="button cycle-button bg-darkCobalt fg-white"><span class="mif-pencil"></span></a>' ;
+            //$player->notas =  '<a href="javascript:loadNotasData('.$link.')" class="button cycle-button bg-darkCobalt fg-white"><span class="mif-search"></span></a>' ;
+            if($player->documento == "SI")
+                $player->kardex =  '<a href="javascript:loadKardexData('.$link.');" class="button cycle-button bg-amber fg-darkCobalt"><span class="mif-profile"></span></a>' ;
+            else
+                $player->kardex = "NO Kardex";
+                
+
         } 
         $data['recordsTotal'] = count($players);
         $data['data'] = $players;
@@ -68,7 +74,7 @@ class Player extends MY_Controller {
             $data['fechanacimiento']        = $this->request['fechanacimiento'];
             $data['idclub']        = $this->request['club'];
             $data['parentesco']        = $this->request['parentesco'];
-            $data['documento']        = $this->request['documentos'];
+            $data['documento']        = $this->request['documento'];
             $data['disciplina']        = $this->request['disciplina'];
             $data['notas']        = $this->request['notas'];
             //print_r($data);
@@ -94,7 +100,7 @@ class Player extends MY_Controller {
             $data['fechanacimiento']        = $this->request['fechanacimiento'];
             $data['idclub']        = $this->request['club'];
             $data['parentesco']        = $this->request['parentesco'];
-            $data['documento']        = $this->request['documentos'];
+            $data['documento']        = $this->request['documento'];
             $data['disciplina']        = $this->request['disciplina'];
             $data['notas']        = $this->request['notas'];
             
@@ -121,5 +127,11 @@ class Player extends MY_Controller {
         $playerData = $this->playerModel->getPlayerById($playerId);
         
         echo json_encode($playerData);
+    }
+    public function updatePlayer(){
+        //players = $this->playerModel->getPlayerList();        
+        //$this->data = $players;        
+        $this->middle = 'player/updatePlayer'; 
+        $this->layout();
     }
 }

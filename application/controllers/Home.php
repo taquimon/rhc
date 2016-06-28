@@ -29,4 +29,49 @@ class Home extends MY_Controller {
         $this->middle = 'home'; // passing middle to function. change this for different views.
         $this->layout();
     }
+    public function login_layout()
+    {
+        //$this->load->helper(array('html','url'));
+        //$this->middle = 'login'; 
+        //$this->layout();   
+        $this->load->view('login_layout');
+    }
+
+    public function login()
+    {
+        if (isset($this->request['username']) 
+            && isset($this->request['password'])) {
+            try {
+                if (!$this->request['username'] || !$this->request['password'])
+                    throw new Exception(
+                        "Nombre de Usuario y Password son requeridos!"
+                    );
+
+                $this->setUserSession(
+                    $this->request['username'],
+                    $this->request['password']
+                );
+            } catch (Exception $e) {
+                $this->session->set_flashdata(
+                    'msg',
+                    "<h4>" . $e->getMessage() . "</h4>"
+                );
+            }
+
+            $uri = "";
+            if ($this->session->flashdata("url"))
+                $uri = $this->session->flashdata("url");
+            redirect($uri);
+        } else {
+            $this->index();
+        }
+
+    }
+
+    public function logout()
+    {
+        $this->unsetUserSession();
+        redirect();
+    }
+
 }

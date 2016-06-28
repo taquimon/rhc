@@ -33,11 +33,12 @@ class Partido_model extends CI_Model
      *
      * @return array
      */
-    public function getPartidoList($disciplina = null)
+    public function getPartidoList($gestion = null, $disciplina = null)
     {
 
         $this->db->select('*')
-        ->from('partido p');
+        ->from('partido p')
+        ->where('YEAR(fecha)',$gestion);
         if($disciplina != null){
             $this->db->where('iddisciplina',$disciplina);
         }

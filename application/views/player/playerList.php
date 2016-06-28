@@ -28,6 +28,7 @@
                 { "data": "parentesco" }, 
                 { "data": "documento" },
                 { "data": "notas" },
+                { "data": "kardex" },
                 { "data": "buttons" },
                 
             ]
@@ -37,8 +38,6 @@
             inline: false,
             format: "yyyy-mm-dd"
         });
-                
-        
     });
         
     function addNewplayerData(){
@@ -56,7 +55,7 @@
                         fechanacimiento : $("#datepicker").val(),
                         club: $("#club").val(),
                         categoria: $("#categoria").val(),
-                        documentos : radio_button_value,
+                        documento : radio_button_value,
                         disciplina: $("#disciplina").val(),
                         parentesco: $("#parentesco").val(),
                         notas: $("#notas").val(),
@@ -114,12 +113,43 @@
                 $("#parentesco").val(json.parentesco);
                 $("#disciplina").val(json.disciplina);
                 $("#notas").val(json.notas);
-                        
+                //$("#kardex").val(json.kardex);                        
                 showDialog( "#dialog_new_player");
                 addMode = false;
                 idPlayerGlobal = idPlayer;
             },
             error: function () {                            
+                $("#player_message").showFatal();
+
+            }
+        });
+    }
+    function loadKardexData(idPlayer){
+        //fillClubNames();
+        $.ajax({
+            url: "<?=site_url('player/ajaxGetPlayerById')?>",
+            data: { playerId: idPlayer },
+            dataType: "json",
+            type: 'POST',
+            success: function (json) {                            
+                $("#name").val(json.name);
+                $("#last").val(json.last);
+                $("#ci").val(json.ci);
+                $("#datepicker").val(json.fechanacimiento);
+                $("#club").val(json.idclub);                
+                $("#parentesco").val(json.parentesco);
+                $("#disciplina").val(json.disciplina);
+                if(json.kardex != null){
+                    $("#kardex").attr('src',"<?=site_url()?>" + json.kardex);    
+                }
+                else{
+                    $("#kardex").attr('src',"");       
+                }
+
+                        
+                showDialog( "#dialog_kardex_player");                
+            },
+            error: function () {
                 $("#player_message").showFatal();
 
             }
@@ -186,23 +216,36 @@
         });
     }
 </script>
+<!-- ui-dialog kardex -->                       
+<div id="dialog_kardex_player" 
+    title="Kardex" data-role="dialog" 
+    class="padding20" data-close-button="true" 
+    data-windows-style="true" data-overlay="true" 
+    data-background="bg-darkCobalt" data-color="fg-white"
+    data-overlay="true" data-overlay-color="op-dark">
+    <div class="grid condensed" border=1>
+        <div class="row cells12">
+            <div class="cell"></div>
+            <div class="cell colspan10"><center><h4 class="fg-white" id="titleDialog">Kardex del Jugador</h4></center></div>
+            <div class="cell"></div>
+        </div>
+        <div class="row cells12">
+            <div class="cell"></div>
+            <img src="" id="kardex">
+            <div class="cell"></div>
+        </div>
+    </div>    
+</div>    
 
 <!-- ui-dialog -->                       
-<div id="dialog_new_player" title="Agregar player" data-role="dialog" id="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-background="bg-cobalt">    
-<div class="window success" data-on-dialog-close="close_func" data-close-button="true" >
-    <div class="window-caption">
-        <span class="window-caption-icon"><span class="mif-windows"></span></span>
-        <span class="window-caption-title">Window .success</span>
-        <span class="btn-min"></span>
-        <span class="btn-max"></span>
-        <span class="btn-close"></span>
-    </div>
-    <div class="window-content" style="height: 100px">
-        Window content
-    </div>
-</div>
+<div id="dialog_new_player" 
+    title="Agregar player" data-role="dialog"
+    class="padding20" data-close-button="true" 
+    data-windows-style="true" data-overlay="true" 
+    data-background="bg-darkCobalt" data-color="fg-white"
+    data-overlay="true" data-overlay-color="op-dark">    
 <div id="player_message" style="display: none"></div>
-<div class="grid condensed">
+<div class="grid condensed" border=1>
     <div class="row cells12">
         <div class="cell"></div>
         <div class="cell colspan10"><center><h4 class="fg-white" id="titleDialog">Datos del Jugador</h4></center></div>
@@ -211,16 +254,16 @@
     <div class="row cells12">
         <div class="cell colspan2"><div class="label fg-white">Nombre(s):</div></div>        
         <div class="cell colspan4">
-            <div class="input-control text" data-role="input">
+            <div class="input-control text info" data-role="input">
             <?=form_input(array('name' => 'player.name','id' => 'name','size' => '25',))?>
-            <button class="button helper-button clear"><span class="mif-cross"></span></button>
+            <!-- <button class="button helper-button clear"><span class="mif-cross"></span></button> -->
         </div>
         </div>
         <div class="cell colspan2"><span class="label fg-white">Apellidos</span></div>
         <div class="cell colspan4">
             <div class="input-control text" data-role="input">
             <?=form_input(array('name' => 'player.last','id' => 'last','size' => '40',))?>
-            <button class="button helper-button clear"><span class="mif-cross"></span></button>
+            <!-- <button class="button helper-button clear"><span class="mif-cross"></span></button> -->
             </div>
         </div>
     </div>
@@ -229,7 +272,7 @@
         <div class="cell colspan4">
             <div class="input-control text"  data-role="input">
                 <?=form_input(array('name' => 'player.ci','id' => 'ci',))?> 
-            <button class="button helper-button clear"><span class="mif-cross"></span></button>
+            <!-- <button class="button helper-button clear"><span class="mif-cross"></span></button> -->
             </div>                            
         </div>
         <div class="cell colspan2"><span class="label fg-white">Fecha Nac.:</span></div>                
@@ -287,10 +330,8 @@
     </div>
 
     <div class="row cells12">        
-        <div class="cell colspan3">            
-            <button onclick="addNewplayerData()" class="button rounded bg-amber"><span class="mif-checkmark"></span> Guardar</button>
-        </div>
-        <div class="cell colspan3">
+        <div class="cell colspan12">         
+            <button onclick="addNewplayerData()" class="button rounded bg-amber"><span class="mif-checkmark"></span> Guardar</button>        
             <button onclick="closeDialog('#dialog_new_player')" class="button rounded bg-amber"><span class="mif-cross"></span> Cancelar</button>
         </div>
     </div>
@@ -315,13 +356,11 @@
             </div>
         <div class="cell  colspan4"></div>
         <div class="cell  colspan2">
-            <button onclick="showDialog('#dialog_new_player'); addMode=true;" class="button rounded bg-amber"><span class="mif-plus"></span> Agregar Nuevo</button>
+            <a href="<?=base_url().'player/updatePlayer'?>" class="button rounded bg-amber"><span class="mif-plus"></span> Agregar Nuevo</a>
         </div>
 
     </div>
     <div class="row cells12">
-        <div class="cell"></div>
-        <div class="cell colspan10">
             <table id="player_table" class="dataTable striped border bordered">
                 <thead>
                     <tr>
@@ -334,7 +373,8 @@
                         <th style="width: 10%">Disciplina</th>
                         <th style="width: 10%">Parentesco</th>
                         <th style="width: 10%">Documentos</th>
-                        <th style="width: 10%">Notas</th>
+                        <th style="width: 5%">Notas</th>
+                        <th style="width: 5%">Kardex</th>
                         <th style="width: 5%">Actions</th>
                     </tr>
                 </thead>

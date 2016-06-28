@@ -20,6 +20,8 @@
                 { "data": "idclub" },
                 { "data": "name" },
                 { "data": "description" },
+                { "data": "disciplinas" },
+                { "data": "activo" },
                 { "data": "buttons" }                                                    
             ]
         });                                              
@@ -142,12 +144,39 @@
         <div class="cell"><span class="label fg-white">Descripcion:</span></div>
         <div class="cell">
             <div class="input-control textarea">
-                <?=form_textarea(array('name' => 'club.description','id' => 'description', "cols" => "40",))?> 
+                <?=form_textarea(array('name' => 'club.description','id' => 'description', "cols" => "60","rows"=>"5"))?> 
             </div>                
         </div>
     </div>
     <div class="row cells">
-        <div class="cell"></div>
+        <div class="cell"><span class="label fg-white">Disciplina</span></div> 
+        <div class="cell">             
+            <label class="input-control checkbox small-check">
+                <input type="checkbox" checked>
+                <span class="check"></span>
+                <span class="caption fg-white">Futbol Senior</span>
+            </label>
+            <label class="input-control checkbox small-check">
+                <input type="checkbox" checked>
+                <span class="check"></span>
+                <span class="caption fg-white">Futbol Libre</span>
+            </label> 
+            <label class="input-control checkbox small-check">
+                <input type="checkbox" checked>
+                <span class="check"></span>
+                <span class="caption fg-white">Futsal Senior</span>
+            </label> 
+            <label class="input-control checkbox small-check">
+                <input type="checkbox" checked>
+                <span class="check"></span>
+                <span class="caption fg-white">Futsal Libre</span>
+            </label> 
+            <label class="input-control checkbox small-check">
+                <input type="checkbox" checked>
+                <span class="check"></span>
+                <span class="caption fg-white">Basquet</span>
+            </label> 
+        </div>
         <div class="cell">
         </div>
     </div>            
@@ -199,6 +228,8 @@
                         <th style="width: 10%">Id</th>
                         <th style="width: 20%">Nombre</th>
                         <th style="width: 30%">Descripcion</th>
+                        <th style="width: 20%">Disciplinas</th>
+                        <th style="width: 10%">Activo</th>
                         <th style="width: 10%">Actions</th>
                     </tr>
                 </thead>

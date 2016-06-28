@@ -42,7 +42,8 @@ class Club extends MY_Controller {
         
         foreach($clubs as $club){
             $link = $club->idclub;
-            $club->buttons =  '<a href="javascript:loadClubData('.$link.')" class="button cycle-button bg-cobalt fg-white"><span class="mif-pencil"></span></a>' ;   
+            $club->disciplinas = "Disciplinas";            
+            $club->buttons =  '<a href="javascript:loadClubData('.$link.')" class="button cycle-button bg-cobalt fg-white"><span class="mif-pencil"></span></a>';
         } 
         $data['recordsTotal'] = count($clubs);
         $data['data'] = $clubs;
