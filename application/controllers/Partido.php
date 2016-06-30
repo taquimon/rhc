@@ -101,9 +101,9 @@ class Partido extends MY_Controller {
             $time->setTime($hora, $minutos);
             $stamp = $time->format('Y-m-d H:i');            
             $data['fecha']        = $stamp;
-            $data['puntos1']        = $this->request['puntos1'];
-            $data['puntos2']        = $this->request['puntos2'];
-            $data['comments']        = $this->request['comments'];
+            $data['puntos1']      = $this->request['puntos1'];
+            $data['puntos2']      = $this->request['puntos2'];
+            $data['comments']     = $this->request['comments'];
             
             
 
@@ -152,13 +152,20 @@ class Partido extends MY_Controller {
         }else{
             $disciplina['iddisciplina'] = 1;
         }
+        if(isset($this->request['gestion'])){
+            $gestion = $this->request['gestion'];    
+        }else{
+            $gestion = 2016;
+        }
            
         
-        $clubes = $this->clubModel->getClubList($disciplina);
+        $clubes = $this->clubModel->getClubList($disciplina, $gestion);
+        print_r($clubes);
         $rankingPartidos = [];
         foreach($clubes as $club){
                     
-            $ranking = $this->partidoModel->getRanking($disciplina['iddisciplina'], $club->idclub);
+            $ranking = $this->partidoModel->getRanking($disciplina['iddisciplina'], $club->idclub, $gestion);
+            //print_r($ranking);
             $puntos = 0;
             $pj = count($ranking);
             $pg = 0;

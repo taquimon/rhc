@@ -12,6 +12,7 @@
                 type: "POST",
                 data: function(d) {
                     d.disciplina = $("#disciplina").val()
+                    d.gestion = $("#gestion").val()
                 }
 
             },
@@ -43,6 +44,7 @@
         var club_table = $("#ranking_table").dataTable();
         var dataRankingFilter = {
             disciplina: $("#disciplina").val(),
+            gestion: $("#gestion").val(),
         };
         var url = "<?=site_url('partido/ajaxRanking')?>";
 
@@ -61,10 +63,12 @@
 
                 }, 1000);
                 disciplinaid = $("#disciplina").val();
-                var urln = "<?=site_url('partido/ajaxRanking/" + disciplinaid + "')?>";
+                gestion = $("#gestion").val();
+                var urln = "<?=site_url('partido/ajaxRanking/" + disciplinaid + "/" + gestion +"')?>";
                 $("#ranking_table").DataTable().ajax.url(urln);
                 $("#ranking_table").DataTable().ajax.reload();
                 $("#disciplina").val(disciplinaid);
+                $("#gestion").val(gestion);
                 $("#titulo").html('Tabla de Posiciones - ' + $("#disciplina option:selected").text());
 
             },
@@ -81,6 +85,16 @@
     <div class="row cells12">
         <div class="cell"></div>
         <div class="cell colspan8">
+            Gestion: 
+            <div class="input-control select">
+                    <select name="gestion" id="gestion">                    
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                    </select>
+            </div>            
             Disciplina:
             <div class="input-control select">
                 <select name="disciplina" id="disciplina">                    

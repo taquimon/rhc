@@ -10,7 +10,7 @@
             //"sAjaxSource": "<?=site_url('club/ajaxListClub/" + disciplina + "')?>",
             ajax:{
                 url: "<?=site_url('club/ajaxListClub/')?>",
-                type: "POST", // This is the default value, could also be POST, or anything you want.
+                type: "POST", 
                 data: function(d) {
                     d.disciplina = $("#disciplina").val()
                 }
@@ -31,11 +31,14 @@
   
     function addNewClubData(){
         var club_table = $("#club_table").dataTable();
+        var values = $('input[name="disciplinas[]"]:checked').map(function(){
+            return $(this).val();
+        }).get().join(",");
         var dataClub = {
                         idClub: idClubGlobal,
                         name: $("#name").val(),
                         description: $("#description").val(),
-                        zona: $("#zona").val()            
+                        disciplinas: values
             };
         var url = "<?=site_url('club/jsonGuardarNuevo')?>"; 
         if(addMode == false){
@@ -123,7 +126,7 @@
 </script>
 
 <!-- ui-dialog -->
-<div id="dialog_new_club" title="Agregar Club" data-role="dialog" id="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-background="bg-cobalt">    
+<div id="dialog_new_club" title="Agregar Club" data-role="dialog" id="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark" data-background="bg-darkCobalt">    
 <div id="club_message" style="display: none"></div>
 <div class="grid">
     <div class="row cells5">
@@ -152,27 +155,27 @@
         <div class="cell"><span class="label fg-white">Disciplina</span></div> 
         <div class="cell">             
             <label class="input-control checkbox small-check">
-                <input type="checkbox" checked>
+                <input type="checkbox" name="disciplinas[]" value="1">
                 <span class="check"></span>
                 <span class="caption fg-white">Futbol Senior</span>
             </label>
             <label class="input-control checkbox small-check">
-                <input type="checkbox" checked>
+                <input type="checkbox" name="disciplinas[]" value="4">
                 <span class="check"></span>
                 <span class="caption fg-white">Futbol Libre</span>
             </label> 
             <label class="input-control checkbox small-check">
-                <input type="checkbox" checked>
+                <input type="checkbox" name="disciplinas[]" value="2">
                 <span class="check"></span>
-                <span class="caption fg-white">Futsal Senior</span>
+                <span class="caption fg-white">Futsala Senior</span>
             </label> 
             <label class="input-control checkbox small-check">
-                <input type="checkbox" checked>
+                <input type="checkbox" name="disciplinas[]" value="5">
                 <span class="check"></span>
                 <span class="caption fg-white">Futsal Libre</span>
             </label> 
             <label class="input-control checkbox small-check">
-                <input type="checkbox" checked>
+                <input type="checkbox" name="disciplinas[]" value="6">
                 <span class="check"></span>
                 <span class="caption fg-white">Basquet</span>
             </label> 
