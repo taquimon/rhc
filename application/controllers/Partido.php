@@ -159,11 +159,12 @@ class Partido extends MY_Controller {
         }
            
         
-        $clubes = $this->clubModel->getClubList($disciplina, $gestion);
-        print_r($clubes);
+        $clubes = $this->clubModel->getClubListByGestion($disciplina['iddisciplina'], $gestion);
+        //print_r($clubes);
         $rankingPartidos = [];
         foreach($clubes as $club){
-                    
+            $result = $this->clubModel->getClubById($club->idclub);
+            $club->name = $result->name;
             $ranking = $this->partidoModel->getRanking($disciplina['iddisciplina'], $club->idclub, $gestion);
             //print_r($ranking);
             $puntos = 0;

@@ -97,7 +97,8 @@ class Club extends MY_Controller {
             $data['name']        = $this->request['name'];
             $data['description'] = $this->request['description'];
             $disciplinas = explode(',',$this->request['disciplinas']);
-            $gestion = 2016;
+            $gestion = $this->request['gestion'];
+            $data['gestion'] = $gestion;
             
             $clubData = $this->clubModel->insert($data);
 
@@ -120,7 +121,7 @@ class Club extends MY_Controller {
             $data['name']        = $this->request['name'];
             $data['description'] = $this->request['description'];
             $disciplinas = explode(',',$this->request['disciplinas']);
-            $gestion = 2016;
+            $gestion = $this->request['gestion'];
             
             $idClub = $this->request['idClub'];
             

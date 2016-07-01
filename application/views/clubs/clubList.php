@@ -38,7 +38,8 @@
                         idClub: idClubGlobal,
                         name: $("#name").val(),
                         description: $("#description").val(),
-                        disciplinas: values
+                        disciplinas: values,
+                        gestion: $("#gestion").val(),
             };
         var url = "<?=site_url('club/jsonGuardarNuevo')?>"; 
         if(addMode == false){
@@ -76,6 +77,8 @@
             success: function (json) {                            
                 $("#name").val(json.name);
                 $("#description").val(json.description);
+                $("#gestion").val(json.gestion);
+                /*@TODO:Load gestion and disciplinas*/
                 showDialog( "#dialog_new_club");
                 addMode = false;
                 idClubGlobal = idClub;
@@ -140,7 +143,21 @@
             <div class="input-control text" data-role="input">
             <?=form_input(array('name' => 'club.name','id' => 'name'))?>
             <button class="button helper-button clear"><span class="mif-cross"></span></button>
+            </div>            
         </div>
+    </div>
+    <div class="row cells">
+        <div class="cell"><span class="label fg-white">Gestion:</span></div>
+        <div class="cell colspan3">
+            <div class="input-control select">
+                <select name="gestion" id="gestion">                    
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                </select>
+            </div>
         </div>
     </div>
     <div class="row cells">                     
@@ -205,6 +222,16 @@
     <div class="row cells12">
         <div class="cell"></div>
         <div class="cell colspan8">
+            Gestion:
+            <div class="input-control select">
+                <select name="gestion" id="gestion1">                    
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                </select>
+            </div> 
             Disciplina:    
             <div class="input-control select">
                 <select name="disciplina" id="disciplina">

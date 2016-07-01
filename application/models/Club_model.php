@@ -141,6 +141,13 @@ class Club_model extends CI_Model
     }
 
     public function getClubListByGestion($disciplina, $gestion) {
-        
+        $query = $this->db->select()
+                ->where('iddisciplina', $disciplina)
+                ->where('gestion', $gestion)                        
+                ->get('club_disc_xref');
+
+        $club = $query->result();
+
+        return $club;
     }
 }
