@@ -33,16 +33,25 @@ class Club extends MY_Controller {
         $filters = array();
         if(isset($this->request['disciplina'])){
             $filters['iddisciplina'] = $this->request['disciplina'];
+            $filters['gestion'] = $this->request['gestion'];
             if($filters['iddisciplina']=='Todos'){
                 $filters = null;
             }
         }
+        $gestion = 2016;
+        if(isset($this->request['gestion'])){
+            $gestion = $this->request['gestion'];
+        }
 
+        //$clubs = $this->clubModel->getClubListByGestion($filters['iddisciplina'], $gestion);
         $clubs = $this->clubModel->getClubList($filters);
-        
+        //print_r($clubs);
         foreach($clubs as $club){
             $link = $club->idclub;
-            $disciplinas = $this->getDisciplinasByClub($club->idclub, 2016);
+            //$clubData = $this->clubModel->getClubById($club->idclub);
+            //print_r($clubData);
+            $disciplinas = $this->getDisciplinasByClub($club->idclub, $gestion);
+            //$clubs->description = $clubData->description;
             $club->disciplinas = $disciplinas;            
             $club->buttons =  '<a href="javascript:loadClubData('.$link.')" class="button cycle-button bg-darkCobalt fg-white"><span class="mif-pencil"></span></a>';
         } 

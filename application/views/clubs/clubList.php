@@ -12,7 +12,8 @@
                 url: "<?=site_url('club/ajaxListClub/')?>",
                 type: "POST", 
                 data: function(d) {
-                    d.disciplina = $("#disciplina").val()
+                    d.disciplina = $("#disciplina").val(),
+                    d.gestion = $("#gestion1").val()
                 }
 
             },
@@ -92,7 +93,9 @@
     function filterTable(){
         var club_table = $("#club_table").dataTable();
         var dataClubFilter = {
-                        disciplina: $("#disciplina").val(),
+                disciplina: $("#disciplina").val(),
+                gestion: $("#gestion1").val()
+
             };
         var url = "<?=site_url('club/ajaxListClub')?>";         
             

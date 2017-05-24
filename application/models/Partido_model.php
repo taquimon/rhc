@@ -91,7 +91,8 @@ class Partido_model extends CI_Model
     }
     public function getRanking($disciplina, $idclub, $gestion = null)
     {
-        $query = $this->db->select()                
+        $query = $this->db->select()
+                ->where('iddisciplina', $disciplina)                
                 ->where('YEAR(fecha)',$gestion)
                 ->where("(equipo1 = {$idclub} OR equipo2 = {$idclub})")
                 //->or_where('equipo2', $idclub)

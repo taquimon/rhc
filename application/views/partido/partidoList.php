@@ -293,7 +293,7 @@
             <div class="cell colspan4">
                 Hora:
                 <select id="hora">
-                    <?php for($i=8; $i<18; $i++) { echo "<option value='".$i. "'>{$i}</option>"; } ?>
+                    <?php for($i=8; $i<21; $i++) { echo "<option value='".$i. "'>{$i}</option>"; } ?>
                 </select>
                 Min:
                 <select id="minuto">
