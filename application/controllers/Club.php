@@ -33,21 +33,46 @@ class Club extends MY_Controller {
         $filters = array();
         if(isset($this->request['disciplina'])){
             $filters['iddisciplina'] = $this->request['disciplina'];
+            $filters['gestion'] = $this->request['gestion'];
             if($filters['iddisciplina']=='Todos'){
                 $filters = null;
             }
         }
+        $gestion = 2016;
+        if(isset($this->request['gestion'])){
+            $gestion = $this->request['gestion'];
+        }
 
+        //$clubs = $this->clubModel->getClubListByGestion($filters['iddisciplina'], $gestion);
         $clubs = $this->clubModel->getClubList($filters);
-        
+        //print_r($clubs);
         foreach($clubs as $club){
             $link = $club->idclub;
-            $club->buttons =  '<a href="javascript:loadClubData('.$link.')" class="button cycle-button bg-cobalt fg-white"><span class="mif-pencil"></span></a>' ;   
+            //$clubData = $this->clubModel->getClubById($club->idclub);
+            //print_r($clubData);
+            $disciplinas = $this->getDisciplinasByClub($club->idclub, $gestion);
+            //$clubs->description = $clubData->description;
+            $club->disciplinas = $disciplinas;            
+            $club->buttons =  '<a href="javascript:loadClubData('.$link.')" class="button cycle-button bg-darkCobalt fg-white"><span class="mif-pencil"></span></a>';
         } 
         $data['recordsTotal'] = count($clubs);
         $data['data'] = $clubs;
         
         echo json_encode($data);
+    }
+    function getDisciplinasByClub($id_club, $gestion) {
+        $disciplinas = $this->clubModel->getClubXrefDisciplina($id_club, $gestion);
+        $disciplinas = array_filter($disciplinas);
+        $arrayDisciplinas = [];
+        if(!empty($disciplinas))
+        {
+            $arrayDisciplinas = [];
+            foreach ($disciplinas as $disc) {
+                $d = $this->clubModel->getDisciplinaById($disc->iddisciplina);
+                array_push($arrayDisciplinas, $d->name);
+            };
+        }
+        return implode(",", $arrayDisciplinas);
     }
 
     public function ajaxGetAllClubs(){
@@ -80,11 +105,14 @@ class Club extends MY_Controller {
         try{            
             $data['name']        = $this->request['name'];
             $data['description'] = $this->request['description'];
-            //$data['zona']        = $this->request['zona'];
-            //print_r($data);
-            $userData = $this->clubModel->insert($data);
+            $disciplinas = explode(',',$this->request['disciplinas']);
+            $gestion = $this->request['gestion'];
+            $data['gestion'] = $gestion;
+            
+            $clubData = $this->clubModel->insert($data);
 
-            if ($userData) {
+            if ($clubData > 0) {                
+                $this->updateDisciplinas($disciplinas, $clubData, $gestion);
                 $result->message = html_message("Se agrego correctamente el nuevo Club","success");
             }
 
@@ -94,19 +122,22 @@ class Club extends MY_Controller {
         echo json_encode($result);
     }
     
+    
     public function jsonGuardarClub()
     {
         $result = new stdClass();
         try{            
             $data['name']        = $this->request['name'];
             $data['description'] = $this->request['description'];
-            //$data['zona']        = $this->request['zona'];
+            $disciplinas = explode(',',$this->request['disciplinas']);
+            $gestion = $this->request['gestion'];
             
             $idClub = $this->request['idClub'];
-            //print_r($data);
+            
             $userData = $this->clubModel->updateClub($idClub, $data);
 
             if ($userData) {
+                $this->updateDisciplinas($disciplinas, $idClub, $gestion);
                 $result->message = html_message("Se actualizo correctamente los datos del Club","success");
             }
 
@@ -123,5 +154,22 @@ class Club extends MY_Controller {
         $clubData = $this->clubModel->getClubById($clubId);
         
         echo json_encode($clubData);
+    }
+
+    public function updateDisciplinas($disciplinas, $idClub, $gestion) {
+        if(!empty($disciplinas)) {
+            /*removing all xrefs first*/
+            $this->clubModel->removeClubXrefDisciplina($idClub, $gestion);
+            foreach ($disciplinas as $disciplina) {
+                
+                $data_club_xref_disc = [];
+                $data_club_xref_disc ['idclub'] = $idClub;
+                $data_club_xref_disc ['iddisciplina'] = $disciplina;
+                $data_club_xref_disc ['gestion'] = $gestion;
+
+                $club_disc = $this->clubModel->insertClubXrefDisciplina($data_club_xref_disc);
+                
+            }
+        }        
     }
 }

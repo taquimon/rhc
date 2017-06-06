@@ -33,11 +33,12 @@ class Partido_model extends CI_Model
      *
      * @return array
      */
-    public function getPartidoList($disciplina = null)
+    public function getPartidoList($gestion = null, $disciplina = null)
     {
 
         $this->db->select('*')
-        ->from('partido p');
+        ->from('partido p')
+        ->where('YEAR(fecha)',$gestion);
         if($disciplina != null){
             $this->db->where('iddisciplina',$disciplina);
         }
@@ -88,11 +89,13 @@ class Partido_model extends CI_Model
         return $result;
 
     }
-    public function getRanking($disciplina, $idclub)
+    public function getRanking($disciplina, $idclub, $gestion = null)
     {
         $query = $this->db->select()
-                ->where('equipo1', $idclub)
-                ->or_where('equipo2', $idclub)
+                ->where('iddisciplina', $disciplina)                
+                ->where('YEAR(fecha)',$gestion)
+                ->where("(equipo1 = {$idclub} OR equipo2 = {$idclub})")
+                //->or_where('equipo2', $idclub)
                 ->get('partido');
         
         $result = $query->result();

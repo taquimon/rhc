@@ -66,9 +66,18 @@ class Club_model extends CI_Model
                 
         $data ['fechaCreacion'] = date('Y-m-d H:i:s');        
         $result = $this->db->insert('club', $data);                
+        $insert_id = $this->db->insert_id();
+        
+        return $insert_id;
 
-        return $result;
+    }
 
+    public function insertClubXrefDisciplina($data) {
+        //$data ['fechaCreacion'] = date('Y-m-d H:i:s');        
+        $result = $this->db->insert('club_disc_xref', $data);
+        $insert_id = $this->db->insert_id();
+        
+        return $insert_id;        
     }
     
     public function getClubById($idClub)
@@ -107,11 +116,38 @@ class Club_model extends CI_Model
                 
         $this->db->where('idclub', $idClub);
         $result = $this->db->update('club', $data);      
-
-
+        
         return $result;
 
     }
+    public function getClubXrefDisciplina($idClub, $gestion, $idDisciplina = null) {
+           $this->db->select()
+            ->where('idclub', $idClub)
+            ->where('gestion', $gestion);
+            if($idDisciplina != null) {
+                $this->db->where('idDisciplina', $idDisciplina);
+            }
+            $query = $this->db->get('club_disc_xref');
 
-    
+        $club = $query->result();
+
+        return $club;
+    }
+
+    public function  removeClubXrefDisciplina($idClub, $gestion){
+        $this->db->where('idClub', $idClub);
+        $this->db->where('gestion', $gestion);
+        $this->db->delete('club_disc_xref');
+    }
+
+    public function getClubListByGestion($disciplina, $gestion) {
+        $query = $this->db->select()
+                ->where('iddisciplina', $disciplina)
+                ->where('gestion', $gestion)                        
+                ->get('club_disc_xref');
+
+        $club = $query->result();
+
+        return $club;
+    }
 }
